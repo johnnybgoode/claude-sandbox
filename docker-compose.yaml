@@ -1,0 +1,35 @@
+services:
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: claude-sandbox:latest      # See run.sh
+    container_name: claude-sandbox
+    stdin_open: true
+    tty: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+      - FOWNER
+      - NET_RAW
+    environment:
+      IS_SANDBOX: 0
+      GIT_USER: ${GIT_USER:-TestUser}
+      GIT_EMAIL: ${GIT_EMAIL:-test@example.com}
+      ENABLE_LSP_TOOLS: 1
+      EDITOR: ${EDITOR:-vim}
+    volumes:
+      - agent-home:/home/agent
+      - ${PWD}:/app
+    command: bash
+    #ports:
+    #  - "${DASHBOARD_PORT:-8080}:8080"
+
+volumes:
+  agent-home:

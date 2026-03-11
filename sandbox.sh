@@ -30,7 +30,7 @@ build() {
 createSandbox() {
   SANDBOX=$(docker sandbox ls --json | jq '.vms[]' -c | grep "$SANDBOX_REF")
   if [ -z "$SANDBOX" ]; then
-    docker sandbox create -t $IMAGE_REF --name "$SANDBOX_REF" claude .
+    docker sandbox create -t $IMAGE_REF --name "$SANDBOX_REF" claude "$GIT_ROOT"
   fi
 }
 
@@ -47,7 +47,8 @@ execSandbox() {
 }
 
 runContainer() {
-  run_cmd env GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" docker compose run -i --rm sandbox
+  run_cmd env GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" \
+    docker compose -p "$SANDBOX_REF" run -i --rm sandbox
 }
 
 execContainer() {
@@ -55,7 +56,7 @@ execContainer() {
   for arg in "$@"; do
     $sep && cmd+=("$arg") || [[ "$arg" == "--" ]] && sep=true || opts+=("$arg")
   done
-  run_cmd docker compose exec "${opts[@]}" sandbox "${cmd[@]}"
+  run_cmd docker compose -p "$SANDBOX_REF" exec "${opts[@]}" sandbox "${cmd[@]}"
 }
 
 usage() {

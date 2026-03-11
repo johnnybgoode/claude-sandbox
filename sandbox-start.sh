@@ -17,18 +17,22 @@ build() {
 }
 
 createSandbox() {
-  SANDBOX=$(docker sandbox ls --json | tr "\n" ' ' | sed -E 's/[[:space:]]+/ /g' | grep "$SANDBOX_REF")
+  SANDBOX=$(docker sandbox ls --json | jq '.vms[]' -c | grep "$SANDBOX_REF")
   if [ -z "$SANDBOX" ]; then
     docker sandbox create -t $IMAGE_REF --name "$SANDBOX_REF" claude .
   fi
 }
 
 runSandbox() {
-  GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" docker sandbox run "$SANDBOX_REF" claude .
+  GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" docker sandbox run "$SANDBOX_REF"
 }
 
 runContainer() {
-  GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" docker compose run sandbox
+  GIT_USER="$GIT_USER" GIT_EMAIL="$GIT_EMAIL" docker compose run -i --rm sandbox
+}
+
+usage() {
+  echo "Usage: $0 [--mode container|sandbox]"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -43,7 +47,7 @@ while [[ $# -gt 0 ]]; do
             esac
             shift 2
             ;;
-        *)
+          *)
             usage; exit 1
             ;;
     esac
@@ -54,7 +58,7 @@ build
 if [ "$SANDBOX_MODE" = "container" ]; then
   runContainer
 else
-  #createSandbox
+  createSandbox
   runSandbox
 fi
 

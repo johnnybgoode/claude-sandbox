@@ -27,7 +27,7 @@ services:
     volumes:
       - agent-home:/home/agent
       - ${PWD}:/app
-    command: bash
+    command: ["bash", "-c", "claude"]
     #ports:
     #  - "${DASHBOARD_PORT:-8080}:8080"
 

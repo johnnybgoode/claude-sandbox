@@ -10,4 +10,5 @@ for file in "${FILES[@]}"; do
 done
 
 chmod +x sandbox.sh docker-entrypoint.sh
+sed -i.bak "s/container_name: claude-sandbox/container_name: claude-${PWD##*/}/" docker-compose.yaml && rm docker-compose.yaml.bak
 echo "Done. Run ./sandbox.sh to start."

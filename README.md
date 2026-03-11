@@ -1,6 +1,6 @@
 # Docker sandbox for Claude Code
 
-A Docker sandbox template for running Claude Code in an isolated environment. Supports both container (docker-compose) and microVM modes, with system tools, pnpm globals, and pre-installed Claude agents.
+A lightweight tool for spinning up and managing Claude Code sandboxes (microVm) and containers. Includes a Docker sandbox template with system tools, pnpm globals, and pre-installed Claude agents.
 
 ## Installation
 

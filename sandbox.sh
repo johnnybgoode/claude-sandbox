@@ -39,7 +39,11 @@ runSandbox() {
 }
 
 execSandbox() {
-  run_cmd docker sandbox exec "$SANDBOX_REF" "$@"
+  local opts=() cmd=() sep=false
+  for arg in "$@"; do
+    $sep && cmd+=("$arg") || [[ "$arg" == "--" ]] && sep=true || opts+=("$arg")
+  done
+  run_cmd docker sandbox exec "${opts[@]}" "$SANDBOX_REF" "${cmd[@]}"
 }
 
 runContainer() {
@@ -47,7 +51,11 @@ runContainer() {
 }
 
 execContainer() {
-  run_cmd docker compose exec sandbox "$@"
+  local opts=() cmd=() sep=false
+  for arg in "$@"; do
+    $sep && cmd+=("$arg") || [[ "$arg" == "--" ]] && sep=true || opts+=("$arg")
+  done
+  run_cmd docker compose exec "${opts[@]}" sandbox "${cmd[@]}"
 }
 
 usage() {
@@ -77,7 +85,6 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     run|exec) COMMAND="$1"; shift; break ;;
-    --) shift; break ;;
     *) usage; exit 1 ;;
   esac
 done

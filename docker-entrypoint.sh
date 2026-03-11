@@ -18,6 +18,8 @@ if [ ! -d "$AGENTS_TARGET" ] && [ -x "$HOME/subagents/install-agents.sh" ]; then
   bash $HOME/subagents/install-agents.sh --install-dir global
 fi
 
-cd /app && bd dolt start
+if [ -d /app/.beads ]; then
+ cd /app && bd dolt start
+fi
 
 exec "$@"

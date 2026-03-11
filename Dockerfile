@@ -40,7 +40,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 # pnpm install
 RUN SHELL=bash pnpm setup && \
   pnpm add -g typescript typescript-language-server @biomejs/biome 
-RUN [ -d "./package.json" ] && pnpm install
+RUN if [ -f ./package.json ]; then pnpm install; fi
 
 ENV IS_SANDBOX=1
 ENV EDITOR="vim"

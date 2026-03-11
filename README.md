@@ -2,23 +2,22 @@
 
 A Docker sandbox template for running Claude Code in an isolated environment. Supports both container (docker-compose) and microVM modes, with system tools, pnpm globals, and pre-installed Claude agents.
 
-## Setup
+## Installation
 
-Clone the template files into your project:
 ```bash
-git clone --depth 1 <repo> && cp -r Dockerfile docker* .dockerignore /path/to/project
+curl -fsSL https://raw.githubusercontent.com/johnnybgoode/claude-sandbox/main/install.sh | bash
 ```
 
 ## Usage
 
 Start the sandbox using the auto-configuring runner:
 ```bash
-./sandbox-start.sh
+./sandbox.sh
 ```
 
-The script reads your git config for name/email, builds the image if needed, and launches Claude Code in container mode (default). To use microVM mode:
+The script reads your git config for name/email, builds the image if needed, and launches Claude Code in a docker microVm. To run Claude in a container, run:
 ```bash
-./sandbox-start.sh --mode sandbox
+./sandbox.sh --mode container
 ```
 
 ## What's included
